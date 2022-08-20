@@ -39,5 +39,4 @@ fun Greeting(name: String) {
     Text(text = "Hello $name!")
 }
 
-private val GradientColors = listOf(Cyan, Blue, Purple500)
 
