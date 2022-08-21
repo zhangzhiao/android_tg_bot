@@ -11,10 +11,10 @@ import com.zza.tgbot.bean.BotEntity
  */
 @Dao
 interface BotDao {
-    @Query("Select * From bot")
+    @Query("Select * From ${DBConfig.BOT_TABLE}")
     fun getAllBot(): MutableList<BotEntity>
 
-    @Query("Select * From bot Where name =:name")
+    @Query("Select * From ${DBConfig.BOT_TABLE} Where name =:name")
     fun getBotByName(name: String): MutableList<BotEntity>
 
     @Delete

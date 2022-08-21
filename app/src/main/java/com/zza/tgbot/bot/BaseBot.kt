@@ -1,8 +1,10 @@
 package com.zza.tgbot.bot
 
 import android.util.Log
+import android.widget.Toast
 import com.zza.tgbot.app.Constants
 import com.zza.tgbot.manager.BotMessageManager
+import com.zza.tgbot.manager.MessageDbManager
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Update
 
@@ -13,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.Update
  * @Describe: 基础bot
  */
 
-class BaseBot : TelegramLongPollingBot() {
+class BaseBot constructor(var onRegisters:()->Unit={}) : TelegramLongPollingBot() {
     override fun getBotToken(): String {
         return Constants.Bot_Token
     }
@@ -22,18 +24,17 @@ class BaseBot : TelegramLongPollingBot() {
         return Constants.Bot_Name
     }
 
+    override fun onRegister() {
+        super.onRegister()
+        Log.e("zza", "Register")
+        onRegisters()
+
+    }
+
     override fun onUpdateReceived(update: Update?) {
-        Log.e("zza", "onUpdateReceived: ${update?.message?.toString()}")
-        update?.message?.photo?.let {
-            BotMessageManager.getImage(it)
-                ?.let { it1 ->
-                    Log.e(
-                        "zza",
-                        "photo${this.getFileUrl(BotMessageManager.getPhotoPath(it1))}"
-                    )
-                }
+        update?.message?.let {
+            MessageDbManager.resolveMessage(it)
         }
-        Log.e("zzaIcon", "icon${this.getFileUrl(update?.message?.chat?.photo?.toString())}")
 
     }
 

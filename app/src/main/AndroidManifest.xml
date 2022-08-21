@@ -14,15 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tgbot"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".TCActivity"
-            android:exported="false"
-            android:label="@string/title_activity_tcactivity"
-            android:theme="@style/Theme.Tgbot" />
-
-        <uses-library
-            android:name="org.apache.http.legacy"
-            android:required="true" />
 
         <activity
             android:name=".ui.activity.MainActivity"

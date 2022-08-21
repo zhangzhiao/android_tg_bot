@@ -15,11 +15,17 @@ import com.zza.tgbot.app.BotApplication
  */
 
 object DatabaseManager {
-    private const val DB_Name = "bot.db"
+    private const val DB_Name = "tgBot.db"
     private val MIGRATIONS = arrayOf(Migration1)
     private lateinit var botApplication: BotApplication
-    val db: BotDatabase by lazy {
+    val botDb: BotDatabase by lazy {
         Room.databaseBuilder(botApplication.applicationContext, BotDatabase::class.java, DB_Name)
+            .addCallback(CreatedCallBack)
+            .addMigrations(*MIGRATIONS)
+            .build()
+    }
+    val messageFileDb: MessageFileDatabase by lazy {
+        Room.databaseBuilder(botApplication.applicationContext, MessageFileDatabase::class.java, DB_Name)
             .addCallback(CreatedCallBack)
             .addMigrations(*MIGRATIONS)
             .build()

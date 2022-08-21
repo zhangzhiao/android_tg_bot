@@ -1,7 +1,11 @@
 package com.zza.tgbot.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import com.drake.net.Get
+import com.drake.net.Net
+import com.drake.net.utils.scopeNetLife
 import com.zza.tgbot.R
 import com.zza.tgbot.base.BaseActivity
 import com.zza.tgbot.bot.BaseBot
@@ -10,7 +14,9 @@ import com.zza.tgbot.manager.BotMessageManager.botIsLaunch
 import com.zza.tgbot.utils.Utils
 import org.slf4j.helpers.Util
 import org.telegram.telegrambots.meta.TelegramBotsApi
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession
+import kotlin.concurrent.thread
 
 
 class MainActivity : BaseActivity() {
@@ -34,9 +40,22 @@ class MainActivity : BaseActivity() {
     private fun testTg() {
         val defaultBotSession = DefaultBotSession()
         val telegramBotsApi = TelegramBotsApi(defaultBotSession.javaClass)
-        val baseBot = BaseBot()
-        telegramBotsApi.registerBot(baseBot)
-        BotMessageManager.changeBot(baseBot)
+        val baseBot = BaseBot {
+          runOnUiThread{
+              Toast.makeText(this, "注册成功", Toast.LENGTH_SHORT).show()
+          }
+        }
+       try{
+           telegramBotsApi.registerBot(baseBot)
+           BotMessageManager.changeBot(baseBot)
+       }catch (e:TelegramApiException){
+           Log.e("zza","注册失败",e)
+       }
         botIsLaunch = true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        BotMessageManager.closeBot()
     }
 }

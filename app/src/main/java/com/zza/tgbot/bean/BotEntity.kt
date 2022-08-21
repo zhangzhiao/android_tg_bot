@@ -2,6 +2,7 @@ package com.zza.tgbot.bean
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.zza.tgbot.database.DBConfig
 
 
 /**
@@ -10,7 +11,7 @@ import androidx.room.PrimaryKey
  * @Describe: 机器人实体类
  */
 
-@Entity(tableName = "bot")
+@Entity(tableName = DBConfig.BOT_TABLE)
 data class BotEntity @JvmOverloads constructor(
     @PrimaryKey(autoGenerate = true)
     var itemId: Long = 0L,

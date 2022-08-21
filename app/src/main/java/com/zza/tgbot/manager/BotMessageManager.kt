@@ -76,5 +76,7 @@ object BotMessageManager {
         }
         return null
     }
-
+    fun closeBot(){
+        this.bot.onClosing()
+    }
 }
