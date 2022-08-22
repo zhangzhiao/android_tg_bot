@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.zza.tgbot.app.BotApplication
+import com.zza.tgbot.bean.MessageChatEntity
 
 
 /**
@@ -24,6 +25,7 @@ object DatabaseManager {
             .addMigrations(*MIGRATIONS)
             .build()
     }
+
     val messageFileDb: MessageFileDatabase by lazy {
         Room.databaseBuilder(botApplication.applicationContext, MessageFileDatabase::class.java, DB_Name)
             .addCallback(CreatedCallBack)
@@ -31,6 +33,12 @@ object DatabaseManager {
             .build()
     }
 
+    val messageChatDb: MessageChatDatabase by lazy {
+        Room.databaseBuilder(botApplication.applicationContext, MessageChatDatabase::class.java, DB_Name)
+            .addCallback(CreatedCallBack)
+            .addMigrations(*MIGRATIONS)
+            .build()
+    }
     fun initApplication(application: BotApplication) {
         botApplication = application
     }

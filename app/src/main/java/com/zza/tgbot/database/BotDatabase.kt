@@ -23,3 +23,9 @@ abstract class MessageFileDatabase : RoomDatabase() {
     val fileDao by lazy { createDao() }
     abstract fun createDao(): MessageFileDao
 }
+
+@Database(version = 1, exportSchema = false, entities = [MessageChatDatabase::class])
+abstract class MessageChatDatabase : RoomDatabase() {
+    val chatDao by lazy { createDao() }
+    abstract fun createDao(): MessageChatDao
+}

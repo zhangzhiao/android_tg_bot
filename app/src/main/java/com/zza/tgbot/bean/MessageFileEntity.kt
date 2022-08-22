@@ -18,13 +18,4 @@ data class MessageFileEntity @JvmOverloads constructor(
     var width: Int = 0,
     var height: Int = 0
 ) {
-    /**
-     * 	1. fileId
-    2. fileUniqueId
-    3. fileName
-    4. fileSize
-    5. mimeType
-    duration //视频 语言消息的长度
-     *
-     */
 }

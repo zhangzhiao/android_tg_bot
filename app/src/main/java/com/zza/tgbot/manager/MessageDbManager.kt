@@ -1,6 +1,7 @@
 package com.zza.tgbot.manager
 
 import android.util.Log
+import com.zza.tgbot.bean.MessageChatEntity
 import com.zza.tgbot.bean.MessageFileEntity
 import com.zza.tgbot.database.DatabaseManager
 import kotlinx.coroutines.Dispatchers
@@ -11,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.PhotoSize
 import java.util.*
 import java.util.concurrent.LinkedBlockingQueue
+import kotlin.concurrent.thread
 
 /**
  * 数据库管理类
@@ -20,7 +22,9 @@ object MessageDbManager {
      * 处理文件消息
      */
     private val fileQueue: MessageQueue<MessageFileEntity> = MessageQueue()
+
     fun resolveMessage(message: Message) {
+        var messageType = MessageChatEntity.MessageChatType.TEXT.ordinal
         //1. 判断存在不存在文件
         message.video?.let {
             val temp = MessageFileEntity(
@@ -30,6 +34,7 @@ object MessageDbManager {
                 mimeType = it.mimeType,
                 duration = it.duration
             )
+            messageType = MessageChatEntity.MessageChatType.VIDEO.ordinal
             saveFileQueue(temp)
             it.thumb?.let { photoSize ->
                 val tempPhotoSize = MessageFileEntity(
@@ -50,6 +55,7 @@ object MessageDbManager {
                 fileName = it.fileName,
                 mimeType = it.mimeType
             )
+            messageType = MessageChatEntity.MessageChatType.DOCUMENT.ordinal
             saveFileQueue(temp)
             it.thumb?.let { photoSize ->
                 val tempPhotoSize = MessageFileEntity(
@@ -68,10 +74,12 @@ object MessageDbManager {
                 fileUniqueId = it.fileUniqueId,
                 mimeType = it.mimeType
             )
+            messageType = MessageChatEntity.MessageChatType.VOICE.ordinal
             saveFileQueue(temp)
         }
         //2. 判断存在不存在图片
         message.photo?.let {
+            messageType = MessageChatEntity.MessageChatType.PHOTO.ordinal
             for (photoSize in it) {
                 val tempPhotoSize = MessageFileEntity(
                     fileId = photoSize.fileId,
@@ -84,6 +92,9 @@ object MessageDbManager {
             }
         }
 
+
+
+
     }
 
     private fun saveFileQueue(messageFile: MessageFileEntity) {
@@ -91,13 +102,11 @@ object MessageDbManager {
     }
 
     fun initQueue() {
-//        runBlocking(Dispatchers.IO) {
-        Thread{
+        thread {
             fileQueue.initQueue {
-                Log.e("zzaDB", "插入文件${it.fileName}")
-                DatabaseManager.messageFileDb.createDao().insertFile(it)
+                DatabaseManager.messageFileDb.fileDao.insertFile(it)
             }
-        }.start()
+        }
     }
 
     /**
@@ -110,9 +119,9 @@ object MessageDbManager {
         }
 
         fun initQueue(save: (t: T) -> Unit) {
-           while (true){
-               save(messageQueue.take())
-           }
+            while (true) {
+                save(messageQueue.take())
+            }
         }
     }
 

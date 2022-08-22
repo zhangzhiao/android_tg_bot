@@ -1,18 +1,30 @@
 package com.zza.tgbot.bean
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.zza.tgbot.database.DBConfig
+
 /**
  * 聊天信息 消息内容表
  */
+@Entity(tableName = DBConfig.CHAT_TABLE)
 data class MessageChatEntity constructor(
-    var dbId:Long,
-    var userId:String,
-    var date:Long,
+    @PrimaryKey(autoGenerate = true)
+    var dbId: Long,
+    var userId: String,
+    var messageId: String,
+    var date: Long,
     //消息中的文本
-    var text:String,
-
-
-
-){
+    var text: String,
+    var type: Int
+) {
+    enum class MessageChatType {
+        TEXT,
+        DOCUMENT,
+        PHOTO,
+        VIDEO,
+        VOICE
+    }
     /**
      * Message(messageId=567, date=1660808807,
      * chat=Chat(id=1604834725, type=private, title=null, firstName=z, lastName=zza, userName=Xiaoaoao_acc, photo=null, description=null, inviteLink=null,
@@ -34,5 +46,4 @@ data class MessageChatEntity constructor(
      * senderChat=null, proximityAlertTriggered=null, messageAutoDeleteTimerChanged=null, isAutomaticForward=null, hasProtectedContent=null,
      * webAppData=null, videoChatStarted=null, videoChatEnded=null, videoChatParticipantsInvited=null, videoChatScheduled=null)
      */
-
 }

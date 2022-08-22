@@ -3,6 +3,10 @@ package com.zza.tgbot.manager
 import com.zza.tgbot.app.SaveKey
 import com.zza.tgbot.bot.BaseBot
 import com.zza.tgbot.utils.SPUtils
+import com.zza.tgbot.utils.doAsync
+import com.zza.tgbot.utils.onUI
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.telegram.telegrambots.meta.api.methods.GetFile
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.File
@@ -76,7 +80,24 @@ object BotMessageManager {
         }
         return null
     }
-    fun closeBot(){
+
+    fun getFileBasePath(fileId: String, filePath: (path: String?) -> Unit) {
+        doAsync({
+            onUI {
+                filePath(null)
+            }
+        }) {
+            val getFileMethod = GetFile()
+            getFileMethod.fileId = fileId
+            val tempFile = bot.execute(getFileMethod)
+            onUI {
+                filePath(bot.getFileUrl(tempFile.filePath))
+            }
+        }
+
+    }
+
+    fun closeBot() {
         this.bot.onClosing()
     }
 }
