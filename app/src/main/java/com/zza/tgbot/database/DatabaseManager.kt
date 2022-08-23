@@ -39,6 +39,12 @@ object DatabaseManager {
             .addMigrations(*MIGRATIONS)
             .build()
     }
+    val messageUserDb: MessageUserDatabase by lazy {
+        Room.databaseBuilder(botApplication.applicationContext, MessageUserDatabase::class.java, DB_Name)
+            .addCallback(CreatedCallBack)
+            .addMigrations(*MIGRATIONS)
+            .build()
+    }
     fun initApplication(application: BotApplication) {
         botApplication = application
     }

@@ -9,7 +9,7 @@ import com.zza.tgbot.database.DBConfig
 data class MessageUserEntity @JvmOverloads constructor(
     @PrimaryKey(autoGenerate = true)
     var dbId: Long = 0L,
-    var userid: String,
+    var userid: Long,
     var firstName: String,
     var lastName: String,
     var userName: String,

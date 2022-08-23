@@ -10,10 +10,10 @@ import com.zza.tgbot.database.DBConfig
 @Entity(tableName = DBConfig.CHAT_TABLE)
 data class MessageChatEntity constructor(
     @PrimaryKey(autoGenerate = true)
-    var dbId: Long,
-    var userId: String,
-    var messageId: String,
-    var date: Long,
+    var dbId: Long = 0L,
+    var userId: Long,
+    var messageId: Int,
+    var date: Int,
     //消息中的文本
     var text: String,
     var type: Int

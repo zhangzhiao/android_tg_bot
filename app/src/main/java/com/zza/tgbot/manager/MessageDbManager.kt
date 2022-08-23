@@ -3,6 +3,7 @@ package com.zza.tgbot.manager
 import android.util.Log
 import com.zza.tgbot.bean.MessageChatEntity
 import com.zza.tgbot.bean.MessageFileEntity
+import com.zza.tgbot.bean.MessageUserEntity
 import com.zza.tgbot.database.DatabaseManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -23,12 +24,24 @@ object MessageDbManager {
      */
     private val fileQueue: MessageQueue<MessageFileEntity> = MessageQueue()
 
+    /**
+     * 处理消息
+     */
+    private val chatQueue: MessageQueue<MessageChatEntity> = MessageQueue()
+
+    /**
+     * 更新用户消息
+     */
+    private val userQueue: MessageQueue<MessageUserEntity> = MessageQueue()
+
+
     fun resolveMessage(message: Message) {
         var messageType = MessageChatEntity.MessageChatType.TEXT.ordinal
-        //1. 判断存在不存在文件
+        //判断文件类型
         message.video?.let {
             val temp = MessageFileEntity(
                 fileId = it.fileId,
+                messageId = message.messageId,
                 fileUniqueId = it.fileUniqueId,
                 fileName = it.fileName,
                 mimeType = it.mimeType,
@@ -39,6 +52,7 @@ object MessageDbManager {
             it.thumb?.let { photoSize ->
                 val tempPhotoSize = MessageFileEntity(
                     fileId = photoSize.fileId,
+                    messageId = message.messageId,
                     fileUniqueId = photoSize.fileUniqueId,
                     filePath = photoSize.filePath,
                     width = photoSize.width,
@@ -51,6 +65,7 @@ object MessageDbManager {
         message.document?.let {
             val temp = MessageFileEntity(
                 fileId = it.fileId,
+                messageId = message.messageId,
                 fileUniqueId = it.fileUniqueId,
                 fileName = it.fileName,
                 mimeType = it.mimeType
@@ -63,6 +78,7 @@ object MessageDbManager {
                     fileUniqueId = photoSize.fileUniqueId,
                     filePath = photoSize.filePath,
                     width = photoSize.width,
+                    messageId = message.messageId,
                     height = photoSize.height
                 )
                 saveFileQueue(tempPhotoSize)
@@ -71,18 +87,19 @@ object MessageDbManager {
         message.voice?.let {
             val temp = MessageFileEntity(
                 fileId = it.fileId,
+                messageId = message.messageId,
                 fileUniqueId = it.fileUniqueId,
                 mimeType = it.mimeType
             )
             messageType = MessageChatEntity.MessageChatType.VOICE.ordinal
             saveFileQueue(temp)
         }
-        //2. 判断存在不存在图片
         message.photo?.let {
             messageType = MessageChatEntity.MessageChatType.PHOTO.ordinal
             for (photoSize in it) {
                 val tempPhotoSize = MessageFileEntity(
                     fileId = photoSize.fileId,
+                    messageId = message.messageId,
                     fileUniqueId = photoSize.fileUniqueId,
                     filePath = photoSize.filePath,
                     width = photoSize.width,
@@ -91,10 +108,21 @@ object MessageDbManager {
                 saveFileQueue(tempPhotoSize)
             }
         }
+        val messageEntity = MessageChatEntity(
+            userId = message.chat.id,
+            date = message.date,
+            messageId = message.messageId,
+            type = messageType,
+            text = message.text
+        )
+    }
 
+    private fun saveChatQueue(messageChatEntity: MessageChatEntity) {
+        chatQueue.addQueue(messageChatEntity)
+    }
 
-
-
+    private fun saveUserQueue(messageUserEntity: MessageUserEntity) {
+        userQueue.addQueue(messageUserEntity)
     }
 
     private fun saveFileQueue(messageFile: MessageFileEntity) {
@@ -104,7 +132,17 @@ object MessageDbManager {
     fun initQueue() {
         thread {
             fileQueue.initQueue {
-                DatabaseManager.messageFileDb.fileDao.insertFile(it)
+                DatabaseManager.messageFileDb.insertOfReplace(it)
+            }
+        }
+        thread {
+            chatQueue.initQueue {
+                DatabaseManager.messageChatDb.insertOfReplace(it)
+            }
+        }
+        thread {
+            userQueue.initQueue {
+                DatabaseManager.messageUserDb.insertOfReplace(it)
             }
         }
     }

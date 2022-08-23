@@ -9,6 +9,7 @@ import java.time.Duration
 data class MessageFileEntity @JvmOverloads constructor(
     @PrimaryKey(autoGenerate = true)
     var dbId: Long = 0L,
+    var messageId:Int,
     var fileId: String,
     var fileUniqueId: String,
     var fileName: String = "",

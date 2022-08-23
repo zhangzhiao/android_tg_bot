@@ -15,12 +15,15 @@ import com.zza.tgbot.bean.MessageUserEntity
 @Dao
 interface MessageChatDao {
     @Query("Select * From ${DBConfig.CHAT_TABLE} Where userId =:userId Limit :start,:end")
-    fun getChatByUserId(userId: String, start: Int, end: Int): MutableList<MessageChatEntity>
+    fun getChatByUserIdLimit(userId: String, start: Int, end: Int): MutableList<MessageChatEntity>
+
+    @Query("Select * From ${DBConfig.CHAT_TABLE} Where userId =:userId and messageId =:messageId")
+    fun getChatByUserIdAndMsgId(userId: Long, messageId: Int): MutableList<MessageChatEntity>
 
     @Delete
     fun deleteChat(vararg messageChatEntity: MessageChatEntity)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertChat(vararg messageChatEntity: MessageChatEntity)
 
     @Insert
