@@ -3,6 +3,8 @@ package com.zza.tgbot.utils
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import android.widget.Toast
 
@@ -13,9 +15,11 @@ import android.widget.Toast
  * @Describe:
  */
 
+
 object Utils {
-    fun openProxy(context: Context,result:()->Unit) {
-        if(!isWifiProxy(context)){
+
+    fun openProxy(context: Context, result: () -> Unit) {
+        if (!isWifiProxy(context)) {
             val intent: Intent? =
                 context.packageManager.getLaunchIntentForPackage("com.v2ray.ang")
             if (intent != null) {
@@ -28,7 +32,7 @@ object Utils {
                     Toast.LENGTH_LONG
                 ).show()
             }
-        }else{
+        } else {
             result()
         }
     }
@@ -42,8 +46,8 @@ object Utils {
     fun isWifiProxy(context: Context): Boolean {
         val proxyPort: Int
         val proxyAddress: String? = System.getProperty("http.proxyHost")
-            val portStr = System.getProperty("http.proxyPort")
-            proxyPort = (portStr ?: "-1").toInt()
+        val portStr = System.getProperty("http.proxyPort")
+        proxyPort = (portStr ?: "-1").toInt()
         return !TextUtils.isEmpty(proxyAddress) && proxyPort != -1 || checkVPN(
             context
         )

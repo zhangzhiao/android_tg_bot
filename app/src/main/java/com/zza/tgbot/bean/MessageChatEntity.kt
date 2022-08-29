@@ -1,6 +1,7 @@
 package com.zza.tgbot.bean
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.zza.tgbot.database.DBConfig
 
@@ -18,13 +19,7 @@ data class MessageChatEntity constructor(
     var text: String,
     var type: Int
 ) {
-    enum class MessageChatType {
-        TEXT,
-        DOCUMENT,
-        PHOTO,
-        VIDEO,
-        VOICE
-    }
+
     /**
      * Message(messageId=567, date=1660808807,
      * chat=Chat(id=1604834725, type=private, title=null, firstName=z, lastName=zza, userName=Xiaoaoao_acc, photo=null, description=null, inviteLink=null,

@@ -37,7 +37,7 @@ abstract class MessageFileDatabase : RoomDatabase() {
     }
 }
 
-@Database(version = 1, exportSchema = false, entities = [MessageChatDatabase::class])
+@Database(version = 1, exportSchema = false, entities = [MessageChatEntity::class])
 abstract class MessageChatDatabase : RoomDatabase() {
     val chatDao by lazy { createDao() }
     abstract fun createDao(): MessageChatDao
@@ -53,7 +53,7 @@ abstract class MessageChatDatabase : RoomDatabase() {
     }
 }
 
-@Database(version = 1, exportSchema = false, entities = [MessageChatDatabase::class])
+@Database(version = 1, exportSchema = false, entities = [MessageUserEntity::class])
 abstract class MessageUserDatabase : RoomDatabase() {
     val userDao by lazy { createDao() }
     abstract fun createDao(): MessageUserDao

@@ -2,6 +2,7 @@ package com.zza.tgbot.manager
 
 import android.util.Log
 import com.zza.tgbot.bean.MessageChatEntity
+import com.zza.tgbot.bean.MessageChatType
 import com.zza.tgbot.bean.MessageFileEntity
 import com.zza.tgbot.bean.MessageUserEntity
 import com.zza.tgbot.database.DatabaseManager
@@ -36,7 +37,7 @@ object MessageDbManager {
 
 
     fun resolveMessage(message: Message) {
-        var messageType = MessageChatEntity.MessageChatType.TEXT.ordinal
+        var messageType = MessageChatType.TEXT.ordinal
         //判断文件类型
         message.video?.let {
             val temp = MessageFileEntity(
@@ -47,7 +48,7 @@ object MessageDbManager {
                 mimeType = it.mimeType,
                 duration = it.duration
             )
-            messageType = MessageChatEntity.MessageChatType.VIDEO.ordinal
+            messageType = MessageChatType.VIDEO.ordinal
             saveFileQueue(temp)
             it.thumb?.let { photoSize ->
                 val tempPhotoSize = MessageFileEntity(
@@ -70,7 +71,7 @@ object MessageDbManager {
                 fileName = it.fileName,
                 mimeType = it.mimeType
             )
-            messageType = MessageChatEntity.MessageChatType.DOCUMENT.ordinal
+            messageType = MessageChatType.DOCUMENT.ordinal
             saveFileQueue(temp)
             it.thumb?.let { photoSize ->
                 val tempPhotoSize = MessageFileEntity(
@@ -91,11 +92,11 @@ object MessageDbManager {
                 fileUniqueId = it.fileUniqueId,
                 mimeType = it.mimeType
             )
-            messageType = MessageChatEntity.MessageChatType.VOICE.ordinal
+            messageType = MessageChatType.VOICE.ordinal
             saveFileQueue(temp)
         }
         message.photo?.let {
-            messageType = MessageChatEntity.MessageChatType.PHOTO.ordinal
+            messageType = MessageChatType.PHOTO.ordinal
             for (photoSize in it) {
                 val tempPhotoSize = MessageFileEntity(
                     fileId = photoSize.fileId,
