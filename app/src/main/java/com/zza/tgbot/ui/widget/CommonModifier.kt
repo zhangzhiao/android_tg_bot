@@ -4,6 +4,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Dp
+import androidx.constraintlayout.compose.ConstrainScope
+import androidx.constraintlayout.compose.ConstraintLayoutScope
+import kotlin.random.Random
 
 fun Modifier.firstBaselineToTop(
     firstBaselineToTop: Dp
@@ -18,3 +21,29 @@ fun Modifier.firstBaselineToTop(
         }
     }
 )
+
+fun randomAlpha(): Float {
+    return Random.nextFloat().coerceIn(0.3f, 0.9f)
+}
+
+fun randomColor(): Float {
+    return Random.nextFloat().coerceIn(0f, 255f)
+}
+fun ConstrainScope.linkBase() {
+    this.top.linkTo(parent.top)
+    this.bottom.linkTo(parent.bottom)
+    this.start.linkTo(parent.start)
+    this.end.linkTo(parent.end)
+}
+
+fun ConstrainScope.linkBottom() {
+    this.bottom.linkTo(parent.bottom)
+    this.start.linkTo(parent.start)
+    this.end.linkTo(parent.end)
+}
+
+fun ConstrainScope.linkTop() {
+    this.top.linkTo(parent.top)
+    this.start.linkTo(parent.start)
+    this.end.linkTo(parent.end)
+}
