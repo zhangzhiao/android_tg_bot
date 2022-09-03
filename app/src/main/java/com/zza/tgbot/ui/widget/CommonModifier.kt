@@ -1,6 +1,7 @@
 package com.zza.tgbot.ui.widget
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Dp
@@ -22,13 +23,27 @@ fun Modifier.firstBaselineToTop(
     }
 )
 
-fun randomAlpha(): Float {
-    return Random.nextFloat().coerceIn(0.3f, 0.9f)
+/**
+ * 通过宽高和坐标算中心点坐标
+ */
+fun Offset.centerCoordinates(width: Float, height: Float): Offset {
+    return Offset((x + width / 2), (y + height / 2))
 }
 
+/**
+ * 随机一个透明度
+ */
+fun randomAlpha(minimumValue: Float = 0.3f, maximumValue: Float = 0.9f): Float {
+    return Random.nextFloat().coerceIn(minimumValue, maximumValue)
+}
+
+/**
+ * 随机一个颜色
+ */
 fun randomColor(): Float {
     return Random.nextFloat().coerceIn(0f, 255f)
 }
+
 fun ConstrainScope.linkBase() {
     this.top.linkTo(parent.top)
     this.bottom.linkTo(parent.bottom)

@@ -1,9 +1,8 @@
 package com.zza.tgbot.viewmodel
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.*
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +14,15 @@ import com.zza.tgbot.ui.activity.TodoItem
  * @CreateTime: 2022/8/29 15:20
  * @Describe:
  */
+
+val iconItems = mutableListOf<ImageVector>().apply {
+    add(Icons.Filled.Lock)
+    add(Icons.Filled.Close)
+    add(Icons.Filled.Check)
+    add(Icons.Filled.Create)
+    add(Icons.Filled.Clear)
+    add(Icons.Filled.AccountBox)
+}
 
 class TodoViewModel : ViewModel() {
     private val baseItems = mutableListOf<TodoItem>().apply {

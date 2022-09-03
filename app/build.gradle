@@ -114,7 +114,7 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata:$composeVersion"
     implementation "androidx.compose.material3:material3:1.0.0-beta01"
     implementation "androidx.compose.material3:material3-window-size-class:1.0.0-beta01"
-    implementation "com.google.accompanist:accompanist-coil:0.13.0"
+    implementation "io.coil-kt:coil-compose:2.2.0"
     //网络请求
     implementation "com.squareup.okhttp3:okhttp:4.10.0"
     implementation 'com.github.liangjingkanji:Net:3.4.14'

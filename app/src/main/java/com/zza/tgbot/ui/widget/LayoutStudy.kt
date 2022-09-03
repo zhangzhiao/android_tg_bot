@@ -15,7 +15,7 @@ fun LayoutStudy(body: @Composable (modifier: Modifier) -> Unit) {
             TopAppBar(title = {
                 Text(text = "IM Test")
             }, actions = {
-                IconButton(onClick = {}) {
+                IconButton(onClick = {}, modifier = Modifier) {
                     Icon(imageVector = Icons.Filled.Favorite, contentDescription = null)
                 }
             })

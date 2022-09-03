@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.zza.tgbot.ui.activity.page.ListPage
 import com.zza.tgbot.ui.theme.TgBotTheme
+import com.zza.tgbot.ui.widget.ImageWatcher
 import com.zza.tgbot.ui.widget.randomAlpha
 import com.zza.tgbot.ui.widget.randomColor
 
@@ -46,6 +47,7 @@ class PageMainActivity : ComponentActivity() {
                     ) {
                         when (selectedIndex.value) {
                             0 -> ListPage()
+                            1 -> ImageWatcher()
                         }
                     }
                     BottomNavigationBar(
