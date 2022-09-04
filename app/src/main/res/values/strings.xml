@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">tgbot</string>
     <string name="title_activity_tcactivity">TCActivity</string>
+    <string name="lrc_label">暂无歌词</string>
 </resources>
