@@ -108,6 +108,19 @@ fun Conversation(
             }.models = msg
         })
 }
+@Composable
+fun TestLazyColumn(items:List<Boolean>){
+    LazyColumn(){
+        items(items) {
+            if(it){
+                TODO("A Composable")
+            }else{
+                TODO("B Composable")
+            }
+        }
+    }
+
+}
 
 @Composable
 fun MessageCard(msg: Message) {
